@@ -1,5 +1,10 @@
 package com.pablocano.util;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
@@ -22,6 +27,14 @@ public class MongoEmbeded {
                 .build();
 
         MongodExecutable mongodExecutable = starter.prepare(mongodConfig);
+
+        mongodExecutable.start();
+
+        MongoClient mongo = new MongoClient(bindIp, port);
+        MongoDatabase db = mongo.getDatabase("myMongoDb");
+        db.createCollection("test-collection");
+
+
 
         Runtime.getRuntime().addShutdownHook(new Thread(mongodExecutable::stop));
 
